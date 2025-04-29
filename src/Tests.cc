@@ -288,7 +288,13 @@ TEST_F(TestNeuralNetwork, NeuralNetwork) {
 // ------------------------------- MAIN -------------------------------
 
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) try {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
+}
+catch (const std::exception& e){
+    std::cerr << "Error: " << e.what() << "\n";
+}
+catch (...){
+    std::cerr << "Unknown exception\n";
 }
