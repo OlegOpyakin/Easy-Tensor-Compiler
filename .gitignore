@@ -12,3 +12,4 @@ debug/
 *.dylib
 
 .DS_Store
+.vscode

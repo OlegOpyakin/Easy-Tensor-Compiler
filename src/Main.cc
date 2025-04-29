@@ -51,10 +51,11 @@ int main() {
     std::vector<size_t> bias_shape = {1, 3, 2, 2};
     Tensor bias(bias_shape, bias_values);
     std::cout << "Bias tensor: " << bias << "\n";
+    const auto& bias_node = std::make_shared<InputData>(bias);
     
     std::cout << "\nBuilding neural network with Addition -> Substraction\n";
     
-    const auto& add_op = std::make_shared<ScalarAddOperation>(input_node, bias);
+    const auto& add_op = std::make_shared<ScalarAddOperation>(input_node, bias_node);
     nn.addOp(add_op);
     
     // ReLU operation

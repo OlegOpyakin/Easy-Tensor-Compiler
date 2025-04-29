@@ -15,7 +15,8 @@ private:
 
     // Calculate index
     size_t index(size_t n, size_t c, size_t h, size_t w) const {
-        assert(n < shape_[0] && c < shape_[1] && h < shape_[2] && w < shape_[3] && "Index out of range");
+        //assert(n < shape_[0] && c < shape_[1] && h < shape_[2] && w < shape_[3] && "Index out of range");
+        if(n > shape_[0] || c > shape_[1] || h > shape_[2] || w > shape_[3]) throw std::out_of_range("Index out of range");
         return n * (shape_[1] * shape_[2] * shape_[3]) + c * (shape_[2] * shape_[3]) + h * shape_[3] + w;
     }
 
@@ -37,7 +38,8 @@ public:
         if (data.empty()) {
             data_.resize(size, 0.0f);
         } else {
-            assert(data.size() == size && "Data size must match tensor size");
+            //assert(data.size() == size && "Data size must match tensor size");
+            if(data.size() != size) throw std::length_error("Data size must match tensor size");
             data_ = data;
         }
     }
@@ -73,7 +75,8 @@ public:
 
     // Get dimension size
     size_t shape(size_t dim) const {
-        assert(dim < shape_.size() && "Dimension index out of range");
+        //assert(dim < shape_.size() && "Dimension index out of range");
+        if(dim > shape_.size()) throw std::out_of_range("Dimension index out of range");
         return shape_[dim];
     }
 
@@ -107,7 +110,8 @@ public:
         for (size_t dim : new_shape) {
             new_size *= dim;
         }
-        assert(new_size == size() && "New shape must have the same total size");
+        //assert(new_size == size() && "New shape must have the same total size");
+        if(new_size != size()) throw std::length_error("New shape must have the same total size");
         shape_ = new_shape;
     }
 
@@ -124,13 +128,15 @@ public:
 
     // Access element flat
     float& at(size_t idx) {
-        assert(idx < data_.size() && "Index out of range");
+        //assert(idx < data_.size() && "Index out of range");
+        if(idx > data_.size()) throw std::out_of_range("Index out of range");
         return data_[idx];
     }
 
     // Access element flat const
     const float& at(size_t idx) const {
-        assert(idx < data_.size() && "Index out of range");
+        //assert(idx < data_.size() && "Index out of range");
+        if(idx > data_.size()) throw std::out_of_range("Index out of range");
         return data_[idx];
     }
 
@@ -139,7 +145,8 @@ public:
 
     // Tensor addition
     Tensor& operator+=(const Tensor& other) {
-        assert(shape_ == other.shape_ && "Tensors must have the same shape");
+        //assert(shape_ == other.shape_ && "Tensors must have the same shape");
+        if(shape_ != other.shape_) throw std::length_error("Tensors must have the same shape");
         for (size_t i = 0; i < data_.size(); ++i) {
             data_[i] += other.data_[i];
         }
@@ -154,7 +161,8 @@ public:
 
     // Tensor subtraction
     Tensor& operator-=(const Tensor& other) {
-        assert(shape_ == other.shape_ && "Tensors must have the same shape");
+        //assert(shape_ == other.shape_ && "Tensors must have the same shape");
+        if(shape_ != other.shape_) throw std::length_error("Tensors must have the same shape");
         for (size_t i = 0; i < data_.size(); ++i) {
             data_[i] -= other.data_[i];
         }
@@ -213,7 +221,8 @@ public:
    
     // Element-wise multiplication
     friend Tensor elementwise_mul(const Tensor& lhs, const Tensor& rhs) {
-        assert(lhs.shape_ == rhs.shape_ && "Tensors must have the same shape");
+        //assert(lhs.shape_ == rhs.shape_ && "Tensors must have the same shape");
+        if(lhs.shape_ != rhs.shape_) throw std::length_error("Tensors must have the same shape");
         Tensor result = lhs;
         for (size_t i = 0; i < result.data_.size(); ++i) {
             result.data_[i] *= rhs.data_[i];

@@ -11,9 +11,10 @@ public:
 class InputData : public INode {
 private:
     Tensor tensor_;
+    
 public:
     InputData(const Tensor& tensor) : tensor_(tensor) {}
-    
+    virtual ~InputData() = default;
     virtual Tensor evaluate() const override {
         return tensor_;
     }
@@ -33,12 +34,11 @@ public:
 
 class BinaryOperation : public INode {
 protected:
-    std::shared_ptr<INode> lhs_;
-    Tensor rhs_;
+    std::shared_ptr<INode> lhs_, rhs_;
     std::vector<INode*> args_;
 
 public:
-    BinaryOperation(const std::shared_ptr<INode> lhs, const Tensor& rhs): lhs_(lhs), rhs_(rhs) {
+    BinaryOperation(const std::shared_ptr<INode> lhs, const std::shared_ptr<INode> rhs): lhs_(lhs), rhs_(rhs) {
         args_.push_back(lhs.get());
     }
 
