@@ -1,0 +1,14 @@
+bin/
+release/
+debug/
+
+*.o
+*.obj
+*.exe
+*.app
+*.out
+*.dll
+*.so
+*.dylib
+
+.DS_Store
