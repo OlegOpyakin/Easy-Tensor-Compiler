@@ -5,9 +5,13 @@
 class ReLUOperation : public UnaryOperation {
 public:
     ReLUOperation(const std::shared_ptr<INode> arg): UnaryOperation(arg) {}
+    ReLUOperation(const Tensor& tensor): UnaryOperation(tensor) {}
 
     Tensor evaluate() const override {
-        Tensor input = arg_->evaluate();
+        Tensor input;
+        if(is_node_) input = arg_->evaluate();
+        else input = tensor_;
+
         Tensor output(input.shape());
         
         // ReLU: max(0, x)

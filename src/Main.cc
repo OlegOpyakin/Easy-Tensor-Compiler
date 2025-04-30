@@ -58,14 +58,6 @@ int main() {
     const auto& add_op = std::make_shared<ScalarAddOperation>(input_node, bias_node);
     nn.addOp(add_op);
     
-    // ReLU operation
-    //const auto& relu_op = std::make_shared<ReLUOperation>(add_op);
-    //nn.addOp(relu_op);
-    
-    // Softmax operation
-    //const auto& softmax_op = std::make_shared<SoftmaxOperation>(relu_op);
-    //nn.addOp(softmax_op);
-    
     std::cout << "Running inference...\n";
     Tensor output = nn.infer();
     std::cout << "Output tensor: " << output << "\n";

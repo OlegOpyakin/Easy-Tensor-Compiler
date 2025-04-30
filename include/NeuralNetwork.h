@@ -1,6 +1,7 @@
 #include "ScalarAddOperation.h"
 #include "ScalarSubOperation.h"
 #include "ScalarMulOperation.h"
+#include "MatMulOperation.h"
 #include "ReLUOperation.h"
 #include "SoftmaxOperation.h"
 #include <unordered_set>
@@ -23,10 +24,8 @@ public:
         return operations_.back()->evaluate();
     }
     
-    
     // Get all operations in the network
     const std::vector<std::shared_ptr<INode>>& getOperations() const { return operations_; }
-    
     
     // Clear all operations
     void clear() { operations_.clear(); }

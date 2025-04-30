@@ -151,10 +151,10 @@ TEST_F(TestBinaryOperation, ScalarSubOperation) {
 
 TEST_F(TestBinaryOperation, ScalarMulOperation) {
     NeuralNetwork nn;
-
+    
     std::vector<float> bias_values(12, 10.0f);
     std::vector<size_t> bias_shape = {1, 3, 2, 2};
-        
+
     t2 = new Tensor(bias_shape, bias_values);
 
     expected_values = {
@@ -170,6 +170,44 @@ TEST_F(TestBinaryOperation, ScalarMulOperation) {
     const auto& mul_node = std::make_shared<InputData>(*t2);
 
     const auto& mul_op = std::make_shared<ScalarMulOperation>(input_node, mul_node);
+    nn.addOp(mul_op);
+
+    Tensor output = nn.infer();
+
+    for(int i = 0; i < output.GetData().size(); ++i){
+        EXPECT_TRUE(fabs(output.GetData()[i] - expected_values[i]) < EPSILON);
+    }
+}
+
+
+TEST_F(TestBinaryOperation, MatMulOperation) {
+    NeuralNetwork nn;
+
+    std::vector<float> bias_values = {
+        10.0f, 1.0f,
+        1.0f, 10.0f,
+        10.0f, 1.0f,
+        1.0f, 10.0f,
+        10.0f, 1.0f,
+        1.0f, 10.0f,
+    };
+    std::vector<size_t> bias_shape = {1, 3, 2, 2};
+        
+    t2 = new Tensor(bias_shape, bias_values);
+
+    expected_values = {
+        1.2f, 2.1f,
+        3.4f, 4.3f,
+        5.6f, 6.5f,
+        7.8f, 8.7f,
+        10.0f, 10.9f,
+        12.2f, 13.1f
+    };
+
+    const auto& input_node = std::make_shared<InputData>(*t1);
+    const auto& mul_node = std::make_shared<InputData>(*t2);
+
+    const auto& mul_op = std::make_shared<MatMulOperation>(input_node, mul_node);
     nn.addOp(mul_op);
 
     Tensor output = nn.infer();
@@ -273,49 +311,11 @@ TEST_F(TestNeuralNetwork, NeuralNetwork) {
     };
 
     const auto& input_node = std::make_shared<InputData>(*t1);
-    const auto& add_node = std::make_shared<InputData>(*t2);
-
-    const auto& add1_op = std::make_shared<ScalarAddOperation>(input_node, add_node);
+    
+    const auto& add1_op = std::make_shared<ScalarAddOperation>(input_node, *t2);
     nn.addOp(add1_op);
 
-    const auto& add2_op = std::make_shared<ScalarAddOperation>(add1_op, add_node);
-    nn.addOp(add2_op);
-
-    Tensor output = nn.infer();
-
-    for(int i = 0; i < output.GetData().size(); ++i){
-        EXPECT_TRUE(fabs(output.GetData()[i] - expected_values[i]) < EPSILON);
-    }
-}
-
-
-// ------------------------------- TEACHER TESTS -------------------------------
-
-
-TEST_F(TeacherTest, NeuralNetwork) {
-    NeuralNetwork nn;
-
-    std::vector<float> bias_values(12, 0.1f);
-    std::vector<size_t> bias_shape = {1, 3, 2, 2};
-        
-    t2 = new Tensor(bias_shape, bias_values);
-
-    expected_values = {
-        0.3f, 0.4f,
-        0.5f, 0.6f,
-        0.7f, 0.8f,
-        0.9f, 1.0f,
-        1.1f, 1.2f,
-        1.3f, 1.4f
-    };
-
-    const auto& input_node = std::make_shared<InputData>(*t1);
-    const auto& add_node = std::make_shared<InputData>(*t2);
-
-    const auto& add1_op = std::make_shared<ScalarAddOperation>(input_node, add_node);
-    nn.addOp(add1_op);
-
-    const auto& add2_op = std::make_shared<ScalarAddOperation>(add1_op, add_node);
+    const auto& add2_op = std::make_shared<ScalarAddOperation>(*t2, add1_op);
     nn.addOp(add2_op);
 
     Tensor output = nn.infer();

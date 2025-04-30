@@ -6,9 +6,12 @@
 class SoftmaxOperation : public UnaryOperation {
 public:
     SoftmaxOperation(const std::shared_ptr<INode> arg): UnaryOperation(arg) {}
+    SoftmaxOperation(const Tensor& tensor): UnaryOperation(tensor) {}
 
     Tensor evaluate() const override {
-        Tensor input = arg_->evaluate();
+        Tensor input;
+        if(is_node_) input = arg_->evaluate();
+        else input = tensor_;
         
         std::vector<size_t> output_shape = input.shape();
         Tensor output(output_shape);
@@ -33,7 +36,6 @@ public:
                 for (size_t h = 0; h < height; ++h) {
                     for (size_t w = 0; w < width; ++w) {
                         output.at(b, c, h, w) = exp_values[w + h * width] / exp_sum;
-                        //std::cout << output.at(b, c, h, w) << "  ";
                     }
                 }
             }
