@@ -9,7 +9,7 @@ bool ApproxEqual(float a, float b){
     return false;
 }
 
-int main() {
+int main() try{
     std::cout << "*** E.T.C. (Easy Tensor Compiler) ***" << std::endl;
     NeuralNetwork nn;
 
@@ -68,4 +68,10 @@ int main() {
 
     std::cout << "\nTest completed successfully!" << std::endl;
     return 0;
+}
+catch (const std::exception& e){
+    std::cerr << "Error: " << e.what() << "\n";
+}
+catch (...){
+    std::cerr << "Unknown exception\n";
 }
