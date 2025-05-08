@@ -2,6 +2,7 @@
 #include <vector>
 #include <cassert>
 #include <stdexcept>
+#include <memory>
 
 #pragma once
 
