@@ -3,6 +3,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <memory>
+#include <math.h>
 
 #pragma once
 
