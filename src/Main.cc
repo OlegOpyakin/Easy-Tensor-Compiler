@@ -1,7 +1,6 @@
 #include "NeuralNetwork.h"
 #include <algorithm>
 #include <iterator>
-#include <simd/vector.h>
 
 #define EPSILON 1e-6
 
