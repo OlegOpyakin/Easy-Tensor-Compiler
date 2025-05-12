@@ -236,12 +236,12 @@ TEST_F(TestBinaryOperation, MatMulOperation) {
     t2 = new Tensor(bias_shape, bias_values);
 
     expected_values = {
-        1.2f, 2.1f, 1.2f,
-        3.4f, 4.3f, 3.4f,
-        5.6f, 6.5f, 5.6f,
-        7.8f, 8.7f, 7.8f,
-        10.0f, 10.9f, 10.0f,
-        12.2f, 13.1f, 12.2f
+        1.3f, 2.4f, 1.3f, 
+        2.4f, 1.3f, 2.4f,
+        5.7f, 6.8f, 5.7f, 
+        6.8f, 5.7f, 6.8f,
+        10.1f, 11.2f, 10.1f, 
+        11.2f, 10.1f, 11.2f
     };
 
     const auto& input_node = std::make_shared<InputData>(*t1);
