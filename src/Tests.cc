@@ -6,6 +6,19 @@
 
 #define EPSILON 1e-2
 
+
+class TestFastMatMult : public ::testing::Test{
+protected:
+    std::vector<float> A;
+    std::vector<float> B;
+    std::vector<float> C;
+    std::vector<float> C_result;
+
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+
 class TestBinaryOperation : public ::testing::Test{
 protected:
     Tensor* t1;
@@ -82,6 +95,33 @@ protected:
         delete t2;
     }
 };
+
+
+// ------------------------------- TESTS FAST MAT MULT -------------------------------
+
+
+TEST_F(TestFastMatMult, MatrixMultiplyNeon){
+    A = {
+        0.1f, 0.2f, 0.3f,
+        0.4f, 0.5f, 0.6f
+    };
+
+    B = {
+        1.0f, 2.0f, 
+        3.0f, 4.0f, 
+        5.0f, 6.0f
+    };
+
+    C = {
+        2.2f, 2.8f,
+        4.9f, 6.4f
+    };
+
+    C_result = MatrixMultiplyNeon::MatrixMultiplyFast(A, B, 2, 2, 3);
+    for(size_t i = 0; i < C.size(); ++i){
+        EXPECT_TRUE(fabs(C[i] - C_result[i]) < EPSILON);
+    }
+}
 
 
 // ------------------------------- TESTS BINARY OPS -------------------------------
@@ -184,24 +224,24 @@ TEST_F(TestBinaryOperation, MatMulOperation) {
     NeuralNetwork nn;
 
     std::vector<float> bias_values = {
-        10.0f, 1.0f,
-        1.0f, 10.0f,
-        10.0f, 1.0f,
-        1.0f, 10.0f,
-        10.0f, 1.0f,
-        1.0f, 10.0f,
+        10.0f, 1.0f, 10.0f,
+        1.0f, 10.0f, 1.0f,
+        10.0f, 1.0f, 10.0f,
+        1.0f, 10.0f, 1.0f,
+        10.0f, 1.0f, 10.0f,
+        1.0f, 10.0f, 1.0f
     };
-    std::vector<size_t> bias_shape = {1, 3, 2, 2};
+    std::vector<size_t> bias_shape = {1, 3, 2, 3};
         
     t2 = new Tensor(bias_shape, bias_values);
 
     expected_values = {
-        1.2f, 2.1f,
-        3.4f, 4.3f,
-        5.6f, 6.5f,
-        7.8f, 8.7f,
-        10.0f, 10.9f,
-        12.2f, 13.1f
+        1.2f, 2.1f, 1.2f,
+        3.4f, 4.3f, 3.4f,
+        5.6f, 6.5f, 5.6f,
+        7.8f, 8.7f, 7.8f,
+        10.0f, 10.9f, 10.0f,
+        12.2f, 13.1f, 12.2f
     };
 
     const auto& input_node = std::make_shared<InputData>(*t1);

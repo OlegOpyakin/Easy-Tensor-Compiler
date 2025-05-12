@@ -14,13 +14,6 @@ private:
     std::vector<size_t> shape_;
     std::vector<float> data_;
 
-
-    // Calculate index
-    size_t index(size_t n, size_t c, size_t h, size_t w) const {
-        if(n > shape_[0] || c > shape_[1] || h > shape_[2] || w > shape_[3]) throw std::out_of_range("Index out of range");
-        return n * (shape_[1] * shape_[2] * shape_[3]) + c * (shape_[2] * shape_[3]) + h * shape_[3] + w;
-    }
-
 public:
     // Default
     Tensor() : shape_({0, 0, 0, 0}), data_() {}
@@ -66,6 +59,12 @@ public:
             data_ = std::move(other.data_);
         }
         return *this;
+    }
+
+    // Calculate index
+    size_t index(size_t n, size_t c, size_t h, size_t w) const {
+        if(n > shape_[0] || c > shape_[1] || h > shape_[2] || w > shape_[3]) throw std::out_of_range("Index out of range");
+        return n * (shape_[1] * shape_[2] * shape_[3]) + c * (shape_[2] * shape_[3]) + h * shape_[3] + w;
     }
 
     // Get shape
