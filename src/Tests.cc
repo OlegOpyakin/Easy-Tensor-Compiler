@@ -258,6 +258,47 @@ TEST_F(TestBinaryOperation, MatMulOperation) {
 }
 
 
+TEST_F(TestBinaryOperation, ConvolOperation) {
+    NeuralNetwork nn;
+
+    std::vector<float> bias_values = {
+        2.0f, 1.0f,
+        1.0f, 2.0f,
+        2.0f, 1.0f,
+        1.0f, 2.0f,
+        2.0f, 1.0f,
+        1.0f, 2.0f,
+    };
+
+    std::vector<size_t> bias_shape = {1, 3, 2, 2};
+        
+    t2 = new Tensor(bias_shape, bias_values);
+
+    expected_values = {
+        1.3f, 2.4f, 1.3f, 
+        2.4f, 1.3f, 2.4f,
+        5.7f, 6.8f, 5.7f, 
+        6.8f, 5.7f, 6.8f,
+        10.1f, 11.2f, 10.1f, 
+        11.2f, 10.1f, 11.2f
+    };
+
+    const auto& input_node = std::make_shared<InputData>(*t1);
+    const auto& mul_node = std::make_shared<InputData>(*t2);
+
+    const auto& mul_op = std::make_shared<ConvolOperation>(input_node, mul_node, 1, 2);
+    nn.addOp(mul_op);
+
+    Tensor output = nn.infer();
+
+    std::cout << "\n";
+    for(int i = 0; i < output.GetData().size(); ++i){
+        //std::cout << output.GetData()[i] << "  ";
+        //EXPECT_TRUE(fabs(output.GetData()[i] - expected_values[i]) < EPSILON);
+    }
+}
+
+
 // ------------------------------- TESTS UNARY OPS -------------------------------
 
 

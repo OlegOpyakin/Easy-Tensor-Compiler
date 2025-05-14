@@ -4,6 +4,7 @@
 #include "MatMulOperation.h"
 #include "ReLUOperation.h"
 #include "SoftmaxOperation.h"
+#include "ConvolOperation.h"
 #include <unordered_set>
 
 #pragma once

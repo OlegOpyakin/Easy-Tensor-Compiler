@@ -162,23 +162,23 @@ void MatrixMultiplyNeon::MatrixMultiplyFast(
 
     std::vector<float> C_padded(n_padded * m_padded, 0.0f);
 
-    std::cout << "\n";
-    for(auto it: A_padded) std::cout << it << " ";
-    std::cout << "\n";
-    for(auto it: B_padded) std::cout << it << " ";
-    std::cout << "\n";
+    //std::clog << "\n";
+    //for(auto it: A_padded) std::clog << it << " ";
+    //std::clog << "\n";
+    //for(auto it: B_padded) std::clog << it << " ";
+    //std::clog << "\n";
 
     MatrixMultiplyNeon::MatrixMultiply(A_padded.data(), B_padded.data(), C_padded.data(), n_padded, m_padded, k_padded);
 
-    for(auto it: C_padded) std::cout << it << " ";
-    std::cout << "\n";
+    //for(auto it: C_padded) std::clog << it << " ";
+    //std::clog << "\n";
 
     for (uint32_t col = 0; col < m; ++col) {
         for (uint32_t row = 0; row < n; ++row) {
             C[col * n + row] = C_padded[col * n_padded + row];
         }
     }
-    for(auto it: C) std::cout << it << " ";
+    //for(auto it: C) std::clog << it << " ";
 }
 
 
